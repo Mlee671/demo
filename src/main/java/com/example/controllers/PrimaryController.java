@@ -31,10 +31,41 @@ public class PrimaryController {
 
     private double firstNumber = 0;
     private double secondNumber = 0;
+    private int decimalPlaces = 0;
+    private int decimalPlacesResult = 0;
     private boolean isResult = false;
 
     private void setLabelText() {
-        label.setText(String.valueOf(firstNumber));
+        if (decimalPlaces > 6) {
+            decimalPlaces = 6; // Limit decimal places to 5
+        }
+        label.setText(String.format("%." + decimalPlaces + "f", firstNumber));
+    }
+
+    private void addToFirstNumber(double value) {
+        if (isResult) {
+            firstNumber = value; // Reset firstNumber to value if result is displayed
+            isResult = false;
+            decimalPlaces = 0;
+        } else if (decimalPlaces > 0) {
+            firstNumber += value / Math.pow(10, decimalPlaces);
+            decimalPlaces++;
+        } else {
+            firstNumber = firstNumber * 10 + value;
+        }
+        setLabelText();
+    }
+
+    private void setOperationLabel(String operation) {
+        if (operationLabel.getText().isEmpty()) {
+            decimalPlacesResult = decimalPlaces; // Store decimal places for result
+            decimalPlaces = 0; // Reset decimal places for next input
+            secondNumber = firstNumber;
+            firstNumber = 0;
+            setLabelText();
+            isResult = false;
+        }
+        operationLabel.setText(operation);
     }
 
     @FXML
@@ -42,165 +73,81 @@ public class PrimaryController {
         if (label.getText().equals("0")) {
             return;
         }
-        if (isResult) {
-            firstNumber = 0; // Reset firstNumber to 0 if result is displayed
-            isResult = false;
-        } else {
-            firstNumber = firstNumber * 10;
-        }
-        setLabelText();
+        addToFirstNumber(0);
     }
 
     @FXML
     private void one() {
-        if (isResult) {
-            firstNumber = 1;    
-            isResult = false;
-        } else {
-            firstNumber = firstNumber * 10 + 1;
-        }
-        setLabelText();
+        addToFirstNumber(1);
     }
 
     @FXML
     private void two() {
-        if (isResult) {
-            firstNumber = 2;    
-            isResult = false;
-        } else {
-            firstNumber = firstNumber * 10 + 2;
-        }
-        setLabelText();
+        addToFirstNumber(2);
     }
 
     @FXML
     private void three() {  
-        if (isResult) {
-            firstNumber = 3;
-            isResult = false;
-        } else {
-            firstNumber = firstNumber * 10 + 3;
-            
-        }
-        setLabelText();
+        addToFirstNumber(3);
     }
 
     @FXML
     private void four() {   
-        if (isResult) {
-            firstNumber = 4;
-            isResult = false;
-        } else {
-            firstNumber = firstNumber * 10 + 4;
-        }
-        setLabelText();
+       addToFirstNumber(4);
     }
 
     @FXML
     private void five() {   
-        if (isResult) {
-            firstNumber = 5;
-            isResult = false;
-        } else {
-            firstNumber = firstNumber * 10 + 5;
-        }
-        setLabelText();
+        addToFirstNumber(5);
     }
 
     @FXML
     private void six() {    
-        if (isResult) {
-            firstNumber = 6;
-            isResult = false;
-        } else {
-            firstNumber = firstNumber * 10 + 6;
-        }
-        setLabelText();
+        addToFirstNumber(6);
     }
 
     @FXML
     private void seven() {          
-        if (isResult) {
-            firstNumber = 7;
-            isResult = false;
-        } else {
-            firstNumber = firstNumber * 10 + 7;
-        }
-        setLabelText();
+        addToFirstNumber(7);
     }
 
     @FXML
     private void eight() {
-        if (isResult) {
-            firstNumber = 8; // Reset firstNumber to 8 if result is displayed
-            isResult = false;
-        } else {
-            firstNumber = firstNumber * 10 + 8;
-        }
-        setLabelText();
+        addToFirstNumber(8);
     }
 
     @FXML
     private void nine() {
-        if (isResult) {
-            firstNumber = 9; // Reset firstNumber to 9 if result is displayed
-            isResult = false;
-        } else {
-            firstNumber = firstNumber * 10 + 9;
-        }
-        setLabelText();
+        addToFirstNumber(9);
     }
 
     @FXML
     private void divide() {
-        if (operationLabel.getText().isEmpty()) {
-            secondNumber = firstNumber;
-            firstNumber = 0;
-            setLabelText();
-            isResult = false;
-        }
-        operationLabel.setText("/");
+        setOperationLabel("/");
     }
 
     @FXML
     private void multiply() {
-        if (operationLabel.getText().isEmpty()) {
-            secondNumber = firstNumber;
-            firstNumber = 0;
-            setLabelText();
-            isResult = false;
-        }
-        operationLabel.setText("*");
+        setOperationLabel("*");
     }
 
     @FXML
     private void add() {
-        if (operationLabel.getText().isEmpty()) {
-            secondNumber = firstNumber;
-            firstNumber = 0;
-            setLabelText();
-            isResult = false;
-        }
-        operationLabel.setText("+");    
+        setOperationLabel("+");    
     }
 
     @FXML
     private void minus() {
-        if (operationLabel.getText().isEmpty()) {
-            secondNumber = firstNumber;
-            firstNumber = 0;
-            setLabelText();
-            isResult = false;
-        }
-        operationLabel.setText("-");
+       setOperationLabel("-");
     }
 
     @FXML
     private void comma() {
-        if (label.getText().contains(".")) {
+        if (decimalPlaces > 0) {
             return;
         }
-        label.setText(label.getText() + ".");
+        decimalPlaces = 1;
+        setLabelText();
     }
     @FXML
     private void equals() {
@@ -225,6 +172,7 @@ public class PrimaryController {
                 firstNumber = secondNumber / firstNumber;
                 break;
         }
+        decimalPlaces = decimalPlacesResult; // Restore decimal places for result
         setLabelText();
         operationLabel.setText("");
         isResult = true; // Indicate that the result is displayed
