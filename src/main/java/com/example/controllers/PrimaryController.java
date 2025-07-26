@@ -36,10 +36,13 @@ public class PrimaryController {
     private boolean isResult = false;
 
     private void setLabelText() {
-        if (decimalPlaces > 6) {
-            decimalPlaces = 6; // Limit decimal places to 5
+        if (decimalPlaces > 5) {
+            label.setText(String.format("%.5f", firstNumber));
+        } else if (decimalPlaces > 0) {
+            label.setText(String.format("%." + (decimalPlaces-1) + "f", firstNumber));
+        } else {
+            label.setText(String.valueOf((int) firstNumber));
         }
-        label.setText(String.format("%." + decimalPlaces + "f", firstNumber));
     }
 
     private void addToFirstNumber(double value) {
