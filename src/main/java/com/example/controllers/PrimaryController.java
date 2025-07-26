@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 
 // com.example.controllers.PrimaryController
 
@@ -27,12 +28,18 @@ public class PrimaryController {
     @FXML private Button btnMinus;
     @FXML private Button btnComma;
     @FXML private Button btnEquals;
+    @FXML private Pane rootPane;
 
     private double firstNumber = 0;
     private double secondNumber = 0;
     private int decimalPlaces = 0;
     private int decimalPlacesResult = 0;
     private boolean isResult = false;
+
+    @FXML
+    public void initialize() {
+         // Ensure the root pane is focused to capture key events
+    }
 
     private void setLabelText() {
         if (decimalPlaces > 5) {
@@ -73,6 +80,17 @@ public class PrimaryController {
     
     @FXML
     private void onKeyPressed(KeyEvent event) {
+        btnEquals.requestFocus();
+        if (event.isShiftDown()){
+            switch (event.getCode()) {
+                case DIGIT8: multiply(); return;
+                case EQUALS: add(); return;
+                case MINUS: minus(); return;
+                default:
+                    // Handle other shift key combinations if necessary
+                    return; // Exit if no valid key combination is pressed
+            }
+        }
         switch (event.getCode()) {
             case DIGIT0: zero(); break;
             case NUMPAD0: zero(); break;
@@ -97,13 +115,12 @@ public class PrimaryController {
             case SLASH: divide(); break;
             case DIVIDE: divide(); break;
             case MULTIPLY: multiply(); break;
-            case ASTERISK: multiply(); break;
             case MINUS: minus(); break;
             case ADD: add(); break;
             case PLUS: add(); break;
             case SUBTRACT: minus(); break;
             case PERIOD: comma(); break;
-            case ENTER: equals(); break;
+            case EQUALS: equals(); break;
             default:
                 // Handle other keys if necessary
                 break;
