@@ -3,6 +3,7 @@ package com.example.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
 
 // com.example.controllers.PrimaryController
 
@@ -67,6 +68,46 @@ public class PrimaryController {
             isResult = false;
         }
         operationLabel.setText(operation);
+    }
+
+    
+    @FXML
+    private void onKeyPressed(KeyEvent event) {
+        switch (event.getCode()) {
+            case DIGIT0: zero(); break;
+            case NUMPAD0: zero(); break;
+            case DIGIT1: one(); break;
+            case NUMPAD1: one(); break;
+            case DIGIT2: two(); break;
+            case NUMPAD2: two(); break;
+            case DIGIT3: three(); break;
+            case NUMPAD3: three(); break;
+            case DIGIT4: four(); break;
+            case NUMPAD4: four(); break;
+            case DIGIT5: five(); break;
+            case NUMPAD5: five(); break;
+            case DIGIT6: six(); break;
+            case NUMPAD6: six(); break;
+            case DIGIT7: seven(); break;
+            case NUMPAD7: seven(); break;
+            case DIGIT8: eight(); break;
+            case NUMPAD8: eight(); break;
+            case DIGIT9: nine(); break;
+            case NUMPAD9: nine(); break;
+            case SLASH: divide(); break;
+            case DIVIDE: divide(); break;
+            case MULTIPLY: multiply(); break;
+            case ASTERISK: multiply(); break;
+            case MINUS: minus(); break;
+            case ADD: add(); break;
+            case PLUS: add(); break;
+            case SUBTRACT: minus(); break;
+            case PERIOD: comma(); break;
+            case ENTER: equals(); break;
+            default:
+                // Handle other keys if necessary
+                break;
+        }
     }
 
     @FXML
